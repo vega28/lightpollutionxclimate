@@ -1,0 +1,13 @@
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# Environments
+.env
+venv/
+
+# Visual Studio Code
+.vscode/
+*.code-workspace
+
+# user-specific files
+notes.md
