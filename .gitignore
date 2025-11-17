@@ -11,3 +11,4 @@ venv/
 
 # user-specific files
 notes.md
+notes/*
