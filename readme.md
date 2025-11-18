@@ -12,9 +12,14 @@
     python3 -m pip install -r requirements.txt
     ```
 
-1. run jupyter notebooks
+1. to run the jupyter notebook:
     ```
     jupyter notebook
+    ```
+
+1. to run the streamlit app:
+    ```
+    python3 -m streamlit run explorer_app.py
     ```
     
 <!-- 1. create `.env` and store environment variables for project config in there (e.g. `API_KEY=<api-keys-value-here>`) -->
