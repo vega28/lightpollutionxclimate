@@ -41,19 +41,69 @@ def get_annual(collection, year):
     """
     return collection.filter(ee.Filter.eq("system:index", year))
 
+# constants
+max_date = datetime(2025, 3, 1)  # limited by viirs: 2014-01-01 - 2025-03-01
+min_date = datetime(2018, 6, 28) # limited by NO2: 2018-06-28 - 2025-10-21
+preset_regions = {
+    'Kigali': {
+        'x_min': 29.992346,
+        'y_max': -1.909109,
+        'x_max': 30.181946,
+        'y_min': -1.990146
+    },
+    'New York City': {
+        'x_min': -74.015999,
+        'y_max': 40.731456,
+        'x_max': -73.877297,
+        'y_min': 40.588735
+    },
+    'San Francisco Bay Area': {
+        'x_min': -123.005470,
+        'y_max': 38.003892,
+        'x_max': -121.588234,
+        'y_min': 37.207518
+    },
+    'Seattle': {
+        'x_min': -122.448617,
+        'y_max': 47.739050,
+        'x_max': -122.085439,
+        'y_min': 47.433840
+    }
+}
+
 
 # user inputs
 col1, col2 = st.columns(2)
 # TODO: 
 # - make this pretty
-# - validate inputs (limit date range to match dataset)
-# - add checkboxes for preset regions and times
+# - add preset dates?
+# - adjust functionality for custom coordinates to be less laggy?
 with col1:
-  start_date = st.date_input('Choose a start date for a two-month range to investigate', datetime(2024, 6, 1) - timedelta(days=60))
-  # top left coordinate
-  x_min, y_max = st.number_input('Minimum Longitude', value=-123.005470), st.number_input('Maximum Latitude', value=38.003892)
-  # bottom right coordinate
-  x_max, y_min = st.number_input('Maximum Longitude', value=-121.588234), st.number_input('Minimum Latitude', value=37.207518)
+  start_date = st.date_input(
+     'Choose a start date for a two-month range to investigate', 
+     datetime(2024, 6, 1) - timedelta(days=60),
+     min_value = min_date,
+     max_value = max_date - timedelta(days=60)
+     )
+  preset_region_choice = st.selectbox(
+     'Choose a preset region or enter custom coordinates below', 
+     list(preset_regions.keys()) + ['Custom'], 
+     index=0
+     )
+  if preset_region_choice != 'Custom':
+    region = preset_regions[preset_region_choice]
+    x_min = region['x_min']
+    y_max = region['y_max']
+    x_max = region['x_max']
+    y_min = region['y_min']  
+  else:
+    # top left coordinate
+    x_min = st.number_input('Minimum Longitude', value=0)
+    y_max = st.number_input('Maximum Latitude', value=1)
+    # bottom right coordinate
+    x_max = st.number_input('Maximum Longitude', value=1)
+    y_min = st.number_input('Minimum Latitude', value=0)
+
 with col2:
   st.write(f'Your chosen date range is: {start_date} to {start_date + timedelta(days=60)}')
   st.write(f'Your chosen region of interest is defined by the bounding box with upper left coordinate ({y_max},{x_min}) and lower right coordinate ({y_min},{x_max})')
@@ -89,6 +139,9 @@ no2_vis_params = {
 
 # create an interactive map
 m = geemap.Map()
+# TODO: 
+# - add legend
+# - add something to indicate pixel size
 m.zoom_to_bounds(roi_bounds)
 m.add_basemap('OpenTopoMap')
 m.add_layer(tropospheric_no2, no2_vis_params, name='Tropospheric NO2 Column Density')
