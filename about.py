@@ -18,7 +18,6 @@ with atmospheric gases and how this light pollution and air quality may correlat
 
 
 st.subheader('Authors')
-# TODO: add author info (if everyone is comfortable with it!)
 st.markdown("""
 - Misha Craddock - [LinkedIn](https://www.linkedin.com/in/misha-craddock/) - [Github](https://github.com/misha-c)
 - Kelsi Flatland - [LinkedIn](https://www.linkedin.com/in/flatland/) - [Github](https://github.com/vega28)
@@ -30,8 +29,20 @@ st.markdown("""
 col1, col2 = st.columns(2)
 
 with col1:
-  st.image('assets/nighttime_kigali.png', caption='Nighttime light pollution over Kigali, Rwanda (summer 2024)', use_column_width=True)
-  st.image('assets/nighttime_sf.png', caption='Nighttime light pollution over San Francisco, US (summer 2024)', use_column_width=True)
+  st.image(
+    'assets/nighttime_kigali.png', 
+    caption='Light pollution in Kigali, Rwanda (summer 2024)', 
+    width='stretch')
+  st.image(
+    'assets/nighttime_sf.png', 
+    caption='Light pollution in San Francisco, US (summer 2024)', 
+    width='stretch')
 with col2:
-  st.image('assets/nighttime_nyc.png', caption='Nighttime light pollution over New York City, US (summer 2024)', use_column_width=True)
-  st.image('assets/nighttime_seattle.png', caption='Nighttime light pollution over Seattle, US (summer 2024)', use_column_width=True)
+  st.image(
+    'assets/nighttime_nyc.png', 
+    caption='Light pollution in New York City, US (summer 2024)', 
+    width='stretch')
+  st.image(
+    'assets/nighttime_seattle.png', 
+    caption='Light pollution in Seattle, US (summer 2024)', 
+    width='stretch')

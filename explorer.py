@@ -151,6 +151,7 @@ m.add_layer(styled_roi, name='ROI')
 
 m.to_streamlit(height=500)
 
+st.divider()
 
 ### pollutant concentration from Google Air Quality API
 timeframe = 25

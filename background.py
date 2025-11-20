@@ -43,14 +43,14 @@ data_sources = {
         'name': 'VIIRS Stray Light Corrected Nighttime Day/Night Band Composites Version 1',
         'id': 'NOAA/VIIRS/DNB/MONTHLY_V1/VCMSLCFG',
         'link': 'https://developers.google.com/earth-engine/datasets/catalog/NOAA_VIIRS_DNB_MONTHLY_V1_VCMSLCFG',
-        'description': '  - temporal coverage: 2014-01-01 - 2025-03-01\n  ' 
+        'description': '  - temporal coverage: 2014-01-01 - 2025-03-01' 
         # TODO - spatial resolution: ____
     },
     'air-quality': {
         'name': 'Google Air Quality API',
         'id': 'Air Quality - Pollutants Information',
         'link': 'https://developers.google.com/maps/documentation/air-quality',
-        'description': '  - temporal coverage: real-time and past 30 days\n  - location coverage: limited\n '
+        'description': '  - temporal coverage: real-time and past 30 days\n  - location coverage: limited'
         # TODO - spatial resolution: ____
     }
     # 'no2': {
@@ -108,7 +108,6 @@ This confirms that light pollution can reach levels that might affect nocturnal 
 Using Google Air Quality data sets Central Park (NYC), and pulling hourly data for current time up to 48 hours in the past, which gives a couple day and night periods, we plotted data from the 17th - 19th November 2025 and the chart below refers:
 """, unsafe_allow_html=True)
 
-# TODO: insert image of graph from the google doc
 st.image("assets/nyc-chart.png")
 st.markdown("""
 Nitrogen dioxide interacts with ozone to produce a nitrate radical (NO₃) that helps to clean out ozone particles at night.  The chart models a similar path where we observe high content on ozone particles during the dark/night time, especially between 17h and midnight. This could mean that light pollution is affecting the natural ozone cleaning process by destroying the nitrate radical, as explained above.  Furthermore, the concentration of the Nitrogen dioxide and Ozone pollutants in the atmosphere are way above recommended levels.
@@ -127,5 +126,3 @@ st.subheader('References')
 for source_id in sources:
     s = sources[source_id]
     st.html(f"[{s['ref']}] <a id='ref-{s['ref']}' href=\"{s['link']}\">{s['title']}</a>")
-
-# st.subheader('Further Reading')
