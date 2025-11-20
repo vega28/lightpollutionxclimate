@@ -71,18 +71,17 @@ Air quality is a critical measure of the atmosphere's purity, determined by the 
 
 Air pollution is primarily caused by anthropogenic sources  such as agricultural practices and burning of fossil fuels for energy and transport, which release precursor compounds like nitrogen oxides that undergo chemical transformations in the atmosphere.{cite('11-yr-greece')}
 
-Key atmospheric gases that significantly impact air quality include ground-level ozone (O₃) and nitrous oxide (NO₂).
+Key atmospheric gases that significantly impact air quality include ground-level ozone (O₃) and nitrogen dioxide (NO₂).
 """, unsafe_allow_html=True)
 
 st.subheader('Global Light Pollution')
 st.markdown(f"""
+Light pollution is excessive human-made light at night that disrupts natural darkness.
+
 Light pollution has a myriad of well studied, extremely negative impacts on all life on the planet. Including but not limited to: 
-
-Wildlife: Disrupts migrations (yearly and daily), nighttime foraging patterns, and reproductive habits, exacerbates habitat degradation and increases mortality rates  
-
-Human Health: Interferes with natural circadian cycles and is linked to several medical conditions, including depression/mental health, hormone disorders, cancers, and cardiovascular disease to name a few… ~80% of people live under polluted skies 
-
-Climate: “DarkSky.Org{cite('darksky')} estimates that least 30 percent of all outdoor lighting in the U.S. alone is wasted, mostly by lights that aren’t shielded. That adds up to $3.3 billion and the release of 21 million tons of carbon dioxide per year!”{cite('light-vs-wildlife')}
+- Wildlife: Disrupts migrations (yearly and daily), nighttime foraging patterns, and reproductive habits, exacerbates habitat degradation and increases mortality rates  
+- Human Health: Interferes with natural circadian cycles and is linked to several medical conditions, including depression/mental health, hormone disorders, cancers, and cardiovascular disease to name a few… ~80% of people live under polluted skies 
+- Climate: “DarkSky.Org{cite('darksky')} estimates that least 30 percent of all outdoor lighting in the U.S. alone is wasted, mostly by lights that aren’t shielded. That adds up to $3.3 billion and the release of 21 million tons of carbon dioxide per year!”{cite('light-vs-wildlife')}
 """, unsafe_allow_html=True)
 
 st.subheader('Possible Interaction?')
