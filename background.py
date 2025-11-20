@@ -43,20 +43,22 @@ data_sources = {
         'name': 'VIIRS Stray Light Corrected Nighttime Day/Night Band Composites Version 1',
         'id': 'NOAA/VIIRS/DNB/MONTHLY_V1/VCMSLCFG',
         'link': 'https://developers.google.com/earth-engine/datasets/catalog/NOAA_VIIRS_DNB_MONTHLY_V1_VCMSLCFG',
-        'description': '  - temporal coverage: 2014-01-01 - 2025-03-01\n  - spatial resolution: ____' # TODO
+        'description': '  - temporal coverage: 2014-01-01 - 2025-03-01\n  ' 
+        # TODO - spatial resolution: ____
     },
-    'no2': {
-        'name': 'Sentinel-5P OFFL NO2: Offline Nitrogen Dioxide',
-        'id': 'COPERNICUS/S5P/OFFL/L3_NO2',
-        'link': 'https://developers.google.com/earth-engine/datasets/catalog/COPERNICUS_S5P_OFFL_L3_NO2',
-        'description': '  - temporal coverage: 2018-06-28 - 2025-10-21\n  - spatial resolution: ____' # TODO
+    'air-quality': {
+        'name': 'Google Air Quality API',
+        'id': 'Air Quality - Pollutants Information',
+        'link': 'https://developers.google.com/maps/documentation/air-quality',
+        'description': '  - temporal coverage: real-time and past 30 days\n  - location coverage: limited\n '
+        # TODO - spatial resolution: ____
     }
 }
 
 
 # page content
 st.header('Is Light Pollution Negatively Impacting Nighttime Air Quality?', divider=True)
-
+st.image("assets/earth_vir_2016_lrg.jpg")
 st.subheader('Global Air Quality')
 st.markdown(f"""
 Air quality is a critical measure of the atmosphere's purity, determined by the concentration of gaseous and particulate pollutants, with poor air quality being a major global health and environmental risk.
@@ -90,11 +92,11 @@ The nitrate radical is highly reactive and only exists significantly at night be
 New studies show that photolysis is occurring at night as well due to artificial light interacting with  nitrate radicals.
 """, unsafe_allow_html=True)
 
-# TODO: insert diagram of interaction 
+st.image("assets/no3-chem.jpg")
 st.markdown(f"""
-[TODO: insert diagram of nitrate radicals interaction{cite('reaction-diagram')}{cite('reaction-diagram-2')}]
+[Diagram of nitrate radicals interaction{cite('reaction-diagram')}{cite('reaction-diagram-2')}]
 """, unsafe_allow_html=True)
-
+st.image("assets/interaction-graphic.png")
 st.markdown(f"""
 This confirms that light pollution can reach levels that might affect nocturnal  O₃ and NO₂ concentrations; therefore, monitoring the impact of light pollution is essential for air pollution assessment.{cite('ground-O3-NO2')}
 
@@ -102,7 +104,7 @@ Using Google Air Quality data sets Central Park (NYC), and pulling hourly data f
 """, unsafe_allow_html=True)
 
 # TODO: insert image of graph from the google doc
-
+st.image("assets/nyc-chart.png")
 st.markdown("""
 Nitrogen dioxide interacts with ozone to produce a nitrate radical (NO₃) that helps to clean out ozone particles at night.  The chart models a similar path where we observe high content on ozone particles during the dark/night time, especially between 17h and midnight. This could mean that light pollution is affecting the natural ozone cleaning process by destroying the nitrate radical, as explained above.  Furthermore, the concentration of the Nitrogen dioxide and Ozone pollutants in the atmosphere are way above recommended levels.
 """, unsafe_allow_html=True)
