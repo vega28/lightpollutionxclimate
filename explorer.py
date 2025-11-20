@@ -1,10 +1,12 @@
 # standard library imports
 from datetime import datetime, timedelta
+import requests, json, pytz
 # 3rd party imports
 import ee
 import geemap.foliumap as geemap
 import streamlit as st
-
+import pandas as pd
+from timezonefinder import TimezoneFinder
 
 # authenticate and access GEE
 ee.Authenticate()
@@ -88,7 +90,7 @@ with col1:
   preset_region_choice = st.selectbox(
      'Choose a preset region or enter custom coordinates below', 
      list(preset_regions.keys()) + ['Custom'], 
-     index=0
+     index=1 # Kigali blows up in Google Air Quality API, choose somewhere else :(
      )
   if preset_region_choice != 'Custom':
     region = preset_regions[preset_region_choice]
@@ -144,33 +146,84 @@ m = geemap.Map()
 # - add something to indicate pixel size
 m.zoom_to_bounds(roi_bounds)
 m.add_basemap('OpenTopoMap')
-m.add_layer(tropospheric_no2, no2_vis_params, name='Tropospheric NO2 Column Density')
 m.add_layer(nighttime, nighttime_vis_params, name='Nighttime')
 m.add_layer(styled_roi, name='ROI')
 
 m.to_streamlit(height=500)
 
 
-# TODO: fix the following map or remove it!
-st.header('Explore Annual Data')
+### pollutant concentration from Google Air Quality API
+timeframe = 25
+# nico: imo we should only ask for one set of coordinates and store it in state
+# so that it gets updated any time they make changes. saves us and our users 
+# some sanity. for now, dodging statefulness.
+LAT = st.number_input('Lat', value=40.746)
+LNG = st.number_input('Lng', value=-73.985)
 
-# Create a layout containing two columns, one for the map and one for the layer dropdown list.
-row1_col1, row1_col2 = st.columns([3, 1])
+def fetch_air_quality_data_from_google():
+    token = st.secrets['GOOGLE_AQ_TOKEN']
+    # fetching air quality data
+    url = f'https://airquality.googleapis.com/v1/history:lookup?key={token}'
+    data = {
+        "location": {
+            "latitude": LAT,
+            "longitude": LNG
+        },
+        "hours": timeframe,
+        "extraComputations": [
+            "POLLUTANT_CONCENTRATION",
+        ],
+    }
+    print(f"data: {data}")
+    response = requests.post(url, json=data)
+    response_data = response.json()
+    return response_data, True if 'error' in response_data else False
 
-# Valid epochs for both datasets range from 2018 to 2024.
-years = ["2019", "2020", "2021", "2022", "2023", "2024"]
+def build_pollutant_dataframe(response_data):
+    # get no2 and o3 dataframe
+    tf = TimezoneFinder()
+    tz_name = tf.timezone_at(lat=LAT, lng=LNG)
+    local_tz = pytz.timezone(tz_name)
 
-# Add a dropdown list and checkbox to the second column.
-with row1_col2:
-    selected_year = st.selectbox("Select a year", years)
-    # add_legend = st.checkbox("Show legend")
+    def _get_data_for_hour(hour):
+        utc_time = datetime.fromisoformat(hour['dateTime'])
+        formatted_local_time = utc_time.astimezone(local_tz).strftime("%I:%M%p %b %m %Y")
+        data = { 'local time': formatted_local_time }
+        for pollutant in hour['pollutants']:
+            code = pollutant['code'] # the pollutant, ie. 'no2' is nitrogen dioxidem 'o3' is ozone
+            if not code in ['no2', 'o3']: continue # we will only look at no2 and o3
+            data[code] = pollutant['concentration']['value'] # the concentration of that pollutant at time of measurement
+        return data
 
-with row1_col1:    
-    m2 = geemap.Map()
-    m2.zoom_to_bounds(roi_bounds)
-    m2.add_basemap('OpenTopoMap')
-    # FIXME: trouble getting these layers...
-    m2.add_layer(get_annual(viirs_collection, selected_year), nighttime_vis_params, name='Nighttime')
-    m2.add_layer(get_annual(no2_collection, selected_year), no2_vis_params, name='Tropospheric NO2 Column Density')
-    m2.add_layer(styled_roi, name='ROI')
-    m2.to_streamlit(height=500)
+    no2_and_o3_data = []
+    for hour in response_data['hoursInfo']:
+        # apparently google sometimes gives null readings, these could be interesting but let's skip them for now
+        if not 'pollutants' in hour: continue
+        no2_and_o3_data.append(_get_data_for_hour(hour))
+
+    return pd.DataFrame(no2_and_o3_data)
+
+def create_chart_of_pollutants_or_error():
+    response_data, error = fetch_air_quality_data_from_google()
+    with no2_and_o3_chart:
+        if error:
+            error_message = f"""
+            ## Uh oh! We weren't able to retrieve air quality data.
+            
+            Error: {response_data['error']['message']}
+            """
+            st.markdown(error_message)
+        else:
+            no2_and_o3_df = build_pollutant_dataframe(response_data)
+            st.write("NO2 and O3 over the last day")
+            st.line_chart(
+                no2_and_o3_df, 
+                x="local time", 
+                y=["no2", "o3"],
+                x_label="local time",
+                y_label="concentrations in PPB",
+            )
+
+no2_and_o3_chart = st.container()
+
+st.button("Make chart", type="secondary", on_click=create_chart_of_pollutants_or_error)
