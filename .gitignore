@@ -5,6 +5,9 @@
 .env
 venv/
 
+# env vars
+.streamlit/secrets.toml
+
 # Visual Studio Code
 .vscode/
 *.code-workspace
