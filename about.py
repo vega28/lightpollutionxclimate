@@ -1,6 +1,7 @@
 import streamlit as st
 
-st.header('About this project')
+st.header('Light Pollution x Air Pollution')
+st.subheader('About this project')
 # TODO: add project description
 st.write('Terra.do Software x Climate Course Final Project - Fall 2025')
 
