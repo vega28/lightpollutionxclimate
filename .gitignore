@@ -3,7 +3,7 @@
 
 # Environments
 .env
-venv/
+venv*
 
 # env vars
 .streamlit/secrets.toml
