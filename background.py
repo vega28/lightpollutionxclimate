@@ -53,6 +53,12 @@ data_sources = {
         'description': '  - temporal coverage: real-time and past 30 days\n  - location coverage: limited\n '
         # TODO - spatial resolution: ____
     }
+    # 'no2': {
+    #     'name': 'Sentinel-5P OFFL NO2: Offline Nitrogen Dioxide',
+    #     'id': 'COPERNICUS/S5P/OFFL/L3_NO2',
+    #     'link': 'https://developers.google.com/earth-engine/datasets/catalog/COPERNICUS_S5P_OFFL_L3_NO2',
+    #     'description': '  - temporal coverage: 2018-06-28 - 2025-10-21\n  - spatial resolution: ____' # TODO
+    # },
 }
 
 
@@ -94,7 +100,7 @@ New studies show that photolysis is occurring at night as well due to artificial
 
 st.image("assets/no3-chem.jpg")
 st.markdown(f"""
-[Diagram of nitrate radicals interaction{cite('reaction-diagram')}{cite('reaction-diagram-2')}]
+Diagram of nitrate radicals interaction{cite('reaction-diagram')}{cite('reaction-diagram-2')}
 """, unsafe_allow_html=True)
 st.image("assets/interaction-graphic.png")
 st.markdown(f"""
