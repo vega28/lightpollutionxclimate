@@ -3,7 +3,10 @@
 
 # Environments
 .env
-venv/
+venv*
+
+# env vars
+.streamlit/secrets.toml
 
 # Visual Studio Code
 .vscode/
