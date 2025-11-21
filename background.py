@@ -64,7 +64,7 @@ data_sources = {
 
 # page content
 st.header('Is Light Pollution Negatively Impacting Nighttime Air Quality?', divider=True)
-st.image("assets/earth_vir_2016_lrg.jpg")
+st.image("assets/earth_vir_2016_m.png")
 st.subheader('Global Air Quality')
 st.markdown(f"""
 Air quality is a critical measure of the atmosphere's purity, determined by the concentration of gaseous and particulate pollutants, with poor air quality being a major global health and environmental risk.

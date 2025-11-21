@@ -7,7 +7,7 @@ st.sidebar.write('Light Pollution x Air Pollution')
 st.sidebar.info(
   'This app allows users to explore light pollution and air pollution data'
 )
-st.sidebar.image("assets/globe_vir_2016_lrg.png")
+st.sidebar.image("assets/globe_vir_2016_sm.png")
 
 # pages and navigation
 about_page = st.Page('about.py', title='About', icon='ℹ️')
