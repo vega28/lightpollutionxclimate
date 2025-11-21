@@ -12,7 +12,7 @@ st.sidebar.image("assets/globe_vir_2016_lrg.png")
 # pages and navigation
 about_page = st.Page('about.py', title='About', icon='ℹ️')
 background_page = st.Page('background.py', title='Background', icon='🌃')
-explorer_page = st.Page('explorer.py', title='Explore on a map', icon='🧭')
+explorer_page = st.Page('explorer.py', title='Explore', icon='🧭')
 
 pg = st.navigation([about_page, background_page, explorer_page, ])
 pg.run()

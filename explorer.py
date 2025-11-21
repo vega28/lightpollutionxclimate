@@ -43,8 +43,8 @@ def get_annual(collection, year):
     return collection.filter(ee.Filter.eq("system:index", year))
 
 # constants
-max_date = datetime(2025, 3, 1)  # limited by viirs: 2014-01-01 - 2025-03-01
-min_date = datetime(2018, 6, 28) # limited by NO2: 2018-06-28 - 2025-10-21
+max_date = datetime(2025, 3, 1) # limited by viirs: 2014-01-01 - 2025-03-01
+min_date = datetime(2014, 1, 1) # limited by viirs
 preset_regions = {
     'Kigali': {
         'x_min': 29.992346,

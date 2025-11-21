@@ -7,13 +7,10 @@ st.write('Terra.do Software x Climate Course Final Project - Fall 2025')
 st.subheader('About this project')
 
 st.markdown("""
-This project attempts to quantify and visualize the potential relationship between   
-artificial light intensity and nighttime air quality across select cities by looking   
-at global light pollution and air quality data from google APIs.  
+This project attempts to quantify and visualize the potential relationship between artificial light intensity and nighttime air quality across select cities by looking at global light pollution and air quality data from google APIs.  
             
-The project explores how urban areas are impacted by unshielded light interacting  
-with atmospheric gases and how this light pollution and air quality may correlate.
-""")
+The project explores how urban areas are impacted by unshielded light interacting with atmospheric gases and how this light pollution and air quality may correlate.
+""", width=550)
 
 
 
