@@ -1,12 +1,11 @@
 # standard library imports
 from datetime import datetime, timedelta
-import requests, json, pytz
+import requests
 # 3rd party imports
 import ee
 import geemap.foliumap as geemap
 import streamlit as st
 import pandas as pd
-from timezonefinder import TimezoneFinder
 
 # authenticate and access GEE
 ee.Authenticate()
@@ -73,6 +72,7 @@ preset_regions = {
     }
 }
 
+st.header("Nightime brightness for location", divider="rainbow")
 
 # user inputs
 col1, col2 = st.columns(2)
@@ -153,6 +153,8 @@ m.to_streamlit(height=500)
 
 st.divider()
 
+st.header("Nitrogen Dioxide and Ozone concentrations in last 24 hours", divider="rainbow")
+
 ### pollutant concentration from Google Air Quality API
 timeframe = 25
 # nico: imo we should only ask for one set of coordinates and store it in state
@@ -175,21 +177,15 @@ def fetch_air_quality_data_from_google():
             "POLLUTANT_CONCENTRATION",
         ],
     }
-    print(f"data: {data}")
     response = requests.post(url, json=data)
     response_data = response.json()
     return response_data, True if 'error' in response_data else False
 
 def build_pollutant_dataframe(response_data):
     # get no2 and o3 dataframe
-    tf = TimezoneFinder()
-    tz_name = tf.timezone_at(lat=LAT, lng=LNG)
-    local_tz = pytz.timezone(tz_name)
-
     def _get_data_for_hour(hour):
-        utc_time = datetime.fromisoformat(hour['dateTime'])
-        formatted_local_time = utc_time.astimezone(local_tz).strftime("%I:%M%p %b %m %Y")
-        data = { 'local time': formatted_local_time }
+        time = datetime.fromisoformat(hour['dateTime'])
+        data = { 'time': time }
         for pollutant in hour['pollutants']:
             code = pollutant['code'] # the pollutant, ie. 'no2' is nitrogen dioxidem 'o3' is ozone
             if not code in ['no2', 'o3']: continue # we will only look at no2 and o3
@@ -202,7 +198,9 @@ def build_pollutant_dataframe(response_data):
         if not 'pollutants' in hour: continue
         no2_and_o3_data.append(_get_data_for_hour(hour))
 
-    return pd.DataFrame(no2_and_o3_data)
+    no2_and_o3_df = pd.DataFrame(no2_and_o3_data)
+    no2_and_o3_df.sort_values(by="time", ascending=True) # sigh
+    return no2_and_o3_df
 
 def create_chart_of_pollutants_or_error():
     response_data, error = fetch_air_quality_data_from_google()
@@ -216,15 +214,14 @@ def create_chart_of_pollutants_or_error():
             st.markdown(error_message)
         else:
             no2_and_o3_df = build_pollutant_dataframe(response_data)
-            st.write("NO2 and O3 over the last day")
             st.line_chart(
                 no2_and_o3_df, 
-                x="local time", 
+                x="time", 
                 y=["no2", "o3"],
-                x_label="local time",
+                x_label="time",
                 y_label="concentrations in PPB",
             )
-
-no2_and_o3_chart = st.container()
+            st.write(no2_and_o3_df)
 
 st.button("Make chart", type="secondary", on_click=create_chart_of_pollutants_or_error)
+no2_and_o3_chart = st.container()
